@@ -3,7 +3,7 @@ import time
 import requests
 import pandas as pd
 
-ACCESS_TOKEN = 'YOUR TOKEN HERE'
+ACCESS_TOKEN = '86cf2a7b90d631f22ac9e8e4f744d5a3cbf30f6c'
 
 github_api = "https://api.github.com"
 gh_session = requests.Session()
@@ -43,7 +43,11 @@ if __name__ == '__main__':
     repo = "ardupilot"
     issues = issues_of_repo_github(owner, repo, github_api)
     dfItem = pd.DataFrame.from_records(issues)
-    dfItem.to_csv('ardupilot.csv')
+    import json
+    with open('ardupilot.json', 'w', encoding='utf-8') as f:
+        df = dfItem.to_json()
+        json.dump(df, f, ensure_ascii=False, indent=4)
+    # dfItem.to_csv('ardupilot.csv')
 
  #passa um dataframe do panda
  #salvar json o resultado do arquivo
