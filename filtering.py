@@ -21,12 +21,11 @@ for index, row in df.iterrows():
 
 
 for index, row in df.iterrows():
-    for item in keywords:
-        if len(row['labels']) > 0:
-            for item2 in row['labels']:
-                for key in keywords:
-                    if key in str(item2['name']).lower():
-                        issues_labels.append(item2['url'])
+    if len(row['labels']) > 0:
+        for item2 in row['labels']:
+            for key in keywords:
+                if key in str(item2['name']).lower():
+                    issues_labels.append(row['url'])
 
 
 # print (issues)
