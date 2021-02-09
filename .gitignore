@@ -1,5 +1,6 @@
 # macOS Files
 .DS_Store
+.idea
 
 commits/ardupilot.json
 commits/betaflight.json
