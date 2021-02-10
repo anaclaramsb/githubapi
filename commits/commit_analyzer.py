@@ -4,12 +4,12 @@ import pandas as pd
 
 # df = pd.read_json('/Users/belize/projetos_github/AnaDrones/githubapi/ardupilot.json')
 
-files = ['/Users/pamsn/Projects/drone_project/codigo_drone/commits/ardupilot.json',
-         '/Users/pamsn/Projects/drone_project/codigo_drone/commits/betaflight.json',
-         '/Users/pamsn/Projects/drone_project/codigo_drone/commits/PX4-Autopilot.json',
-         '/Users/pamsn/Projects/drone_project/codigo_drone/commits/cleanflight.json',
-         '/Users/pamsn/Projects/drone_project/codigo_drone/commits/inav.json',
-         '/Users/pamsn/Projects/drone_project/codigo_drone/commits/paparazzi.json',
+files = ['../commits/ardupilot.json',
+         '../commits/betaflight.json',
+         '../commits/PX4-Autopilot.json',
+         '../commits/cleanflight.json',
+         '../commits/inav.json',
+         '../commits/paparazzi.json',
          ]
 
 for file in files:

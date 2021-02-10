@@ -6,8 +6,8 @@ import pandas as pd
 
 files = [
 
-         '/Users/pamsn/Projects/drone_project/githubapi/pulls/inav.json',
-         # '/Users/pamsn/Projects/drone_project/codigo_drone/pulls/paparazzi.json',
+         '../pulls/inav.json',
+         '../pulls/paparazzi.json',
          ]
 
 for file in files:

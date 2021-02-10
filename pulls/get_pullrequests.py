@@ -60,7 +60,7 @@ for url in repositories:
     repo = url.split("/")[4].replace(".git", "")
     df = create_pulls_df(owner,repo, github_api)
     import json
-    with open('/Users/pamsn/Projects/drone_project/githubapi/pulls/' + repo + '.json', 'w', encoding='utf-8') as f:
+    with open('../pulls/' + repo + '.json', 'w', encoding='utf-8') as f:
         df = df.to_json()
         json.dump(df, f, ensure_ascii=False, indent=4)
     time.sleep(300)
