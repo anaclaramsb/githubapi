@@ -24,5 +24,6 @@ for file in files:
 
     # is_closed = df.loc[df['state'] == 'closed']
 
-    commits = df[df['title'].str.contains('fix|defect|error|bug|issue|mistake|incorrect|fault|flaw')]
+    # commits = df[df['title'].str.contains('fix|defect|error|bug|issue|mistake|incorrect|fault|flaw')]
+    commits = df[df['title'].str.contains('fix')]
     print("Project Name:" + file +"   "+str(len(commits)) + "   Total Commits: " + str(len(df.index)))

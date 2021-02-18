@@ -1,3 +1,4 @@
+import os
 import time
 
 import pandas
@@ -10,11 +11,8 @@ gh_session.auth = ("pamsn", "a9aac7a15552b60618b40320d2d7261a4e232c2b")
 headers = {'user-agent': 'pamsn'}
 
 
-repositories = [
-                'https://github.com/ArduPilot/ardupilot',
-                'https://github.com/betaflight/betaflight',
+repositories = ['https://github.com/ArduPilot/ardupilot',
                  'https://github.com/PX4/PX4-Autopilot',
-                 'https://github.com/cleanflight/cleanflight',
                 'https://github.com/iNavFlight/inav',
                 'https://github.com/paparazzi/paparazzi']
 
@@ -56,7 +54,9 @@ for url in repositories:
     repo = url.split("/")[4].replace(".git", "")
     df = create_commits_df(owner,repo, github_api)
     import json
-    with open('commits/'+repo+'.json', 'w', encoding='utf-8') as f:
-        df = df.to_json()
-        json.dump(df, f, ensure_ascii=False, indent=4)
+
+    if not os.path.exists('/commits/'+repo+'.json'):
+        with open('../commits/'+repo+'.json', 'a+', encoding='utf-8') as f:
+            df = df.to_json()
+            json.dump(df, f, ensure_ascii=False, indent=4)
     time.sleep(300)
