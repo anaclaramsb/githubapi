@@ -19,14 +19,12 @@ for file in files:
 
     # print(df.head().to_string())
 
-    keywords = ['fix', 'defect', 'error', 'bug', 'issue', 'mistake', 'incorrect', 'fault', 'flaw']
+    # keywords = ['fix', 'defect', 'error', 'bug', 'issue', 'mistake', 'incorrect', 'fault', 'flaw']
 
 
     # commits_message = df[df['commit.message'].str.contains(keywords)]
     commits_message_fix = df[(df['commit.message'].str.contains('(?::|\/|\s|^)fix(?:\s|\,|\/|:$)'))]
     commits_message_fixes = df[(df['commit.message'].str.contains('(?::|\/|\s|^)fixes(?:\s|\,|\/|:$)'))]
-
-
     result = pd.concat([commits_message_fix, commits_message_fixes], ignore_index=False)
     result = result.loc[result.astype(str).drop_duplicates().index]
     commits_message_fixed = df[(df['commit.message'].str.contains('(?::|\/|\s|^)fixed(?:\s|\,|\/|:$)'))]
@@ -97,8 +95,22 @@ for file in files:
 
 
 
-
-    # studied_commits = commits_message.sample()
+    if 'ardupilot' in file:
+        result_sample = result_21.sample(190)
+        pd.set_option('display.max_colwidth', 1000)
+        print(result_sample['html_url'].to_string(index=False, header=False))
+    if 'PX4' in file:
+        result_sample = result_21.sample(105)
+        pd.set_option('display.max_colwidth', 1000)
+        print(result_sample['html_url'].to_string(index=False, header=False))
+    if 'inav' in file:
+        result_sample = result_21.sample(22)
+        pd.set_option('display.max_colwidth', 1000)
+        print(result_sample['html_url'].to_string(index=False, header=False))
+    if 'paparazzi' in file:
+        result_sample = result_21.sample(59)
+        pd.set_option('display.max_colwidth', 1000)
+        print(result_sample['html_url'].to_string(index=False, header=False))
 
 
     print("Project Name:" + file +"   "+str(len(result_21)) + "   Total Commits: " + str(len(df.index)))
