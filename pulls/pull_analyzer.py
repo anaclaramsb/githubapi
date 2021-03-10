@@ -1,29 +1,13 @@
 import json
 
+import numpy as np
 import pandas as pd
 
 # df = pd.read_json('/Users/belize/projetos_github/AnaDrones/githubapi/ardupilot.json')
 
-files = [
-         '../pulls/ardupilot.json',
-        '../pulls/PX4-Autopilot.json',
-         '../pulls/inav.json',
-         '../pulls/paparazzi.json',
-         ]
 
-for file in files:
-    with open(file) as json_file:
-        data = json.load(json_file)
 
-    data_dict = json.loads(data)
-    df = pd.DataFrame.from_dict(data_dict, orient='columns')
-
-    # print(df.loc[df['Merged'] == True].to_string())
-
-    # keywords = ['fix', 'defect', 'error', 'bug', 'issue', 'mistake', 'incorrect', 'fault', 'flaw']
-    pull_title =[]
-
-    # pull_title = df[df['title'].str.contains(keywords)]
+def titleFilter(df):
     pull_title_fix = df[(df['title'].str.contains('(?::|\/|\s|^)fix(?:\s|\,|\/|:$)'))]
     pull_title_fixes = df[(df['title'].str.contains('(?::|\/|\s|^)fixes(?:\s|\,|\/|:$)'))]
     result = pd.concat([pull_title_fix, pull_title_fixes], ignore_index=False)
@@ -91,10 +75,72 @@ for file in files:
     pull_title_failure = df[(df['title'].str.contains('(?::|\/|\s|^)failure(?:\s|\,|\/|:$)'))]
     result_21 = pd.concat([result_20, pull_title_failure], ignore_index=False)
     result_21 = result_21.loc[result_21.astype(str).drop_duplicates().index]
+    return result_21
 
-    # print(result_21.head().to_string())
+
+def tagFilter(df):
+    result = []
+    tags = []
+    cont = 0
+    for index, row in df.iterrows():
+        # print(row['labels'])
+        if len(row['labels']) > 0:
+            for tag in row['labels']:
+                # print(tag['name'])
+                if str(tag['name']).lower() in ['fix','fixes','fixed','fixing','defect','defects','error','errors',
+                                   'bug','bug-fix','bugfix','bugs','issue','issues','mistake','mistakes',
+                                   'mistaken', 'incorrect','incorrect','fault','faults','flaws','flaw','failure']:
+                    # print(index)
+                    # rowIndex = df.index[int(index)]
+                    # df.loc[rowIndex, 'Tag'] = True
+                    tags.append(True)
+                    break
+                else:
+                    tags.append(False)
+            if True in tags:
+                # result.append(True)
+                # print(cont)
+                # print(1)
+                rowIndex = df.index[cont]
+                df.loc[rowIndex, 'Tag'] = True
+        else:
+            # result.append(False)
+            rowIndex = df.index[cont]
+            df.loc[rowIndex, 'Tag'] = False
+        cont = cont +1
+
+    # se = pd.Series(result)
+    # df['Tag'] = se.values
+    return df
 
 
+
+files = [
+         '../pulls/ardupilot.json',
+        '../pulls/PX4-Autopilot.json',
+         '../pulls/inav.json',
+         '../pulls/paparazzi.json',
+         ]
+
+for file in files:
+    with open(file) as json_file:
+        data = json.load(json_file)
+
+    data_dict = json.loads(data)
+    df = pd.DataFrame.from_dict(data_dict, orient='columns')
+
+
+    filtered_titles = titleFilter(df.loc[df['Merged'] == True])
+    filtered_tags = tagFilter(df.loc[df['Merged'] == True])
+    filtered_tags = filtered_tags.loc[filtered_tags['Tag'] == True]
+
+    # print(filtered_tags.head().to_string())
+
+    result = pd.concat([filtered_titles, filtered_tags], ignore_index=False)
+    final_result = result.loc[result.astype(str).drop_duplicates().index]
+
+
+    # print(df.head().to_string())
 
     # if 'ardupilot' in file:
     #     result_sample = result_21.sample(190)
@@ -113,5 +159,4 @@ for file in files:
     #     pd.set_option('display.max_colwidth', 1000)
     #     print(result_sample['html_url'].to_string(index=False, header=False))
 
-    print("Project Name:" + file + "   " + str(len(result_21.loc[result_21['Merged'] == True])) + "   Total pulls: " + str(len(df.index)))
-    # # print(file)
+    print("Project Name:" + file + "  to analyze:  " + str(len(final_result.loc[final_result['Merged'] == True])) +"   Merged:   "  + str(len(df.loc[df['Merged'] == True])) + "   Tags:   "  + str(len(final_result.loc[final_result['Tag'] == True])) +"   Total pulls: " + str(len(df.index)))
