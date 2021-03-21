@@ -130,33 +130,42 @@ for file in files:
     df = pd.DataFrame.from_dict(data_dict, orient='columns')
 
 
+    # duplicateRowsDF = df[df.duplicated('html_url')]
+    # print(duplicateRowsDF)
+
     filtered_titles = titleFilter(df.loc[df['Merged'] == True])
     filtered_tags = tagFilter(df.loc[df['Merged'] == True])
     filtered_tags = filtered_tags.loc[filtered_tags['Tag'] == True]
 
-    # print(filtered_tags.head().to_string())
 
     result = pd.concat([filtered_titles, filtered_tags], ignore_index=False)
     final_result = result.loc[result.astype(str).drop_duplicates().index]
 
+    final_result = final_result[final_result['Tag'].notna()]
+    final_result = final_result[final_result['Merged'].notna()]
+
+    # print(final_result.sort_values('html_url').to_string())
+
+    # duplicateRowsDF = final_result[final_result.duplicated('html_url')]
+    # print(duplicateRowsDF['html_url'])
 
     # print(df.head().to_string())
 
-    # if 'ardupilot' in file:
-    #     result_sample = result_21.sample(190)
-    #     pd.set_option('display.max_colwidth', 1000)
-    #     print(result_sample['html_url'].to_string(index=False, header=False))
-    # if 'PX4' in file:
-    #     result_sample = result_21.sample(105)
-    #     pd.set_option('display.max_colwidth', 1000)
-    #     print(result_sample['html_url'].to_string(index=False, header=False))
-    # if 'inav' in file:
-    #     result_sample = result_21.sample(22)
-    #     pd.set_option('display.max_colwidth', 1000)
-    #     print(result_sample['html_url'].to_string(index=False, header=False))
-    # if 'paparazzi' in file:
-    #     result_sample = result_21.sample(59)
-    #     pd.set_option('display.max_colwidth', 1000)
-    #     print(result_sample['html_url'].to_string(index=False, header=False))
+    if 'ardupilot' in file:
+        result_sample = final_result.sample(25)
+        pd.set_option('display.max_colwidth', 1000)
+        print(result_sample['html_url'].sort_values().to_string(index=False, header=False))
+    if 'PX4' in file:
+        result_sample = final_result.sample(182)
+        pd.set_option('display.max_colwidth', 1000)
+        print(result_sample['html_url'].sort_values().to_string(index=False, header=False))
+    if 'inav' in file:
+        result_sample = final_result.sample(83)
+        pd.set_option('display.max_colwidth', 1000)
+        print(result_sample['html_url'].sort_values().to_string(index=False, header=False))
+    if 'paparazzi' in file:
+        result_sample = final_result.sample(65)
+        pd.set_option('display.max_colwidth', 1000)
+        print(result_sample['html_url'].sort_values().to_string(index=False, header=False))
 
     print("Project Name:" + file + "  to analyze:  " + str(len(final_result.loc[final_result['Merged'] == True])) +"   Merged:   "  + str(len(df.loc[df['Merged'] == True])) + "   Tags:   "  + str(len(final_result.loc[final_result['Tag'] == True])) +"   Total pulls: " + str(len(df.index)))
