@@ -7,7 +7,7 @@ from pandas.io.json import json_normalize
 
 github_api = "https://api.github.com"
 gh_session = requests.Session()
-gh_session.auth = ("pamsn", "a9aac7a15552b60618b40320d2d7261a4e232c2b")
+gh_session.auth = YOUR TOKEN HERE
 headers = {'user-agent': 'pamsn'}
 
 
@@ -29,7 +29,7 @@ def commits_of_repo_github(owner, repo, api):
         #     time.sleep(60 * 60)
         #     print("Sleeping...")
         #     total_requests = 0
-        url = api + '/repos/{}/{}/commits?page={}&per_page=100&access_token={}'.format(owner, repo, i, "a9aac7a15552b60618b40320d2d7261a4e232c2b")
+        url = api + '/repos/{}/{}/commits?page={}&per_page=100&access_token={}'.format(owner, repo, i, YOUR TOKEN HERE)
         time.sleep(1)
         print(url)
         commit_pg = gh_session.get(url = url, headers = headers)
